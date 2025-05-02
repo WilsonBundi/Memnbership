@@ -26,5 +26,11 @@ class MemberModel {
             ':family' => $data['family_id']
         ]);
     }
+
+    public function getMemberById($id) {
+        $stmt = $this->db->prepare("SELECT * FROM family_members WHERE id = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }
 ?>

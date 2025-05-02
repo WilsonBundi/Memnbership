@@ -5,26 +5,35 @@ class FamilyModel {
     private $db;
 
     public function __construct() {
-        try {
-            $database = new Database();
-            $this->db = $database->connect();
-            
-            // Verify connection
-            if (!$this->db) {
-                throw new Exception("Database connection failed");
-            }
-        } catch(Exception $e) {
-            die("Model initialization error: " . $e->getMessage());
-        }
+        $this->db = (new Database())->connect();
+    }
+    public function getFinancialYears() {
+        $stmt = $this->db->query("SELECT * FROM financial_years");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function getAllFamilies() {
+        $stmt = $this->db->query("SELECT * FROM families");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getAllFamilies() {
+    // Add this new method
+    public function create($name, $address) {
         try {
-            $stmt = $this->db->query("SELECT * FROM families");
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $stmt = $this->db->prepare("
+                INSERT INTO families (name, address) 
+                VALUES (:name, :address)
+            ");
+            
+            $stmt->execute([
+                ':name' => $name,
+                ':address' => $address
+            ]);
+            
+            return $this->db->lastInsertId();
+            
         } catch(PDOException $e) {
-            error_log("Database error: " . $e->getMessage());
-            return [];
+            error_log("Family creation error: " . $e->getMessage());
+            return false;
         }
     }
 }

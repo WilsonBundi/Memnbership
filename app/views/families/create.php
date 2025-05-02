@@ -1,6 +1,6 @@
-<?php include '/../app/views/layouts/header.php'; ?>
+<?php include __DIR__ . '/../layouts/header.php'; ?>
 
-<div class="container">
+<div class="container mt-4">
     <h2>Add New Family</h2>
     
     <?php if (isset($_SESSION['error'])): ?>
@@ -8,7 +8,7 @@
         <?php unset($_SESSION['error']); ?>
     <?php endif; ?>
 
-    <form action="/families/store" method="POST">
+    <form action="/Membership/public/families/store" method="POST">
         <div class="form-group">
             <label>Family Name:</label>
             <input type="text" name="name" class="form-control" required>
@@ -19,8 +19,8 @@
             <textarea name="address" class="form-control" required></textarea>
         </div>
 
-        <button type="submit" class="btn btn-primary">Add Family</button>
+        <button type="submit" class="btn btn-primary mt-3">Add Family</button>
     </form>
 </div>
 
-<?php include '/../app/views/layouts/footer.php'; ?>
+<?php include __DIR__ . '/../layouts/footer.php'; ?>
